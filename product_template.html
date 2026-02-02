@@ -217,19 +217,18 @@
         </div>
 
         <div class="mt-12 bg-[#1E293B]/50 backdrop-blur-sm rounded-2xl border border-white/5 overflow-hidden">
-            <!-- Tab Switching: Handled by event delegation in ui.js using data-tab-target and data-tab-content -->
-            <div class="flex border-b border-white/5 bg-[#0F172A]/50 px-4 pt-4 gap-2" id="product-tabs">
-                <button type="button" data-tab-target="desc" id="tab-btn-desc" class="px-4 md:px-8 py-3 bg-[#1E293B]/50 text-cyan-400 font-bold rounded-t-lg border-t border-x border-white/5 text-sm relative top-[1px] transition-all">Description</button>
-                <button type="button" data-tab-target="reviews" id="tab-btn-reviews" class="px-4 md:px-8 py-3 text-slate-400 hover:text-slate-200 font-medium text-sm transition-colors">Reviews (<span id="review-count-badge">{{REVIEW_COUNT}}</span>)</button>
+            <div class="flex border-b border-white/5 bg-[#0F172A]/50 px-4 pt-4 gap-2">
+                <button type="button" id="tab-btn-desc" class="px-4 md:px-8 py-3 bg-[#1E293B]/50 text-cyan-400 font-bold rounded-t-lg border-t border-x border-white/5 text-sm relative top-[1px] transition-all">Description</button>
+                <button type="button" id="tab-btn-reviews" class="px-4 md:px-8 py-3 text-slate-400 hover:text-slate-200 font-medium text-sm transition-colors">Reviews (<span id="review-count-badge">{{REVIEW_COUNT}}</span>)</button>
             </div>
 
-            <div id="tab-desc" data-tab-content="desc" class="p-6 md:p-8 space-y-6">
+            <div id="tab-desc" class="p-6 md:p-8 space-y-6">
                 <div id="long-desc" class="prose prose-invert max-w-none text-slate-300 leading-relaxed">
                     {{LONG_DESC}}
                 </div>
             </div>
 
-            <div id="tab-reviews" data-tab-content="reviews" class="p-6 md:p-8 space-y-8 hidden">
+            <div id="tab-reviews" class="p-6 md:p-8 space-y-8 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     <div class="lg:col-span-2 space-y-6" id="reviews-list">
                         {{REVIEWS_LIST}}
@@ -355,25 +354,36 @@
     {{FOOTER}}
 
     <!-- Core Scripts -->
-    <script src="../../ui.js" defer></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../site_data.js"></script>
+    <script src="../../ui.js"></script>
     <script>
         // --- Interaction Handlers ---
         function updateInputStars(rating) {
             const container = document.getElementById('input-stars');
             const ratingInput = document.getElementById('input-rating');
             if (!container || !ratingInput) return;
+            
             ratingInput.value = rating;
             let html = '';
             for (let i = 1; i <= 5; i++) {
-                html += `<button type="button" onclick="updateInputStars(${i})" class="focus:outline-none transition-transform hover:scale-125"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${i <= rating ? '#facc15' : 'none'}" stroke="${i <= rating ? '#facc15' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-6 h-6 ${i <= rating ? 'text-yellow-400' : 'text-slate-600'}"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>`;
+                html += `
+                    <button type="button" onclick="updateInputStars(${i})" class="focus:outline-none transition-transform hover:scale-125">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="${i <= rating ? '#facc15' : 'none'}" stroke="${i <= rating ? '#facc15' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-6 h-6 ${i <= rating ? 'text-yellow-400' : 'text-slate-600'}">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </button>
+                `;
             }
             container.innerHTML = html;
         }
 
         function handleReviewSubmit(event) {
             event.preventDefault();
-            if (document.getElementById('input-password').value !== '12345') { alert('Invalid code!'); return; }
+            if (document.getElementById('input-password').value !== '12345') {
+                alert('Invalid code!');
+                return;
+            }
             alert('Review submitted! (Demo only)');
             event.target.reset();
             updateInputStars(5);
@@ -382,7 +392,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const starContainer = document.getElementById('input-stars');
             if (starContainer) updateInputStars(5);
-            if (typeof lucide !== 'undefined' && lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         });
     </script>
 </body>

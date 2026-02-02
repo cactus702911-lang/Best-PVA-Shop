@@ -1,4 +1,5 @@
 function initUI() {
+    console.log("initUI started. Path:", window.location.pathname);
     // 1. Path Management (Simplified with root-relative paths)
     const paths = (window.siteConfig && window.siteConfig.pathConfig) ? window.siteConfig.pathConfig : {
         product: 'product',
@@ -146,43 +147,153 @@ function initUI() {
         }, 300);
     };
 
-    // 4. Robust Tab Switching (Event Delegation)
-    /**
-     * PERMANENT FIX: Product Tab Switching Logic
-     * This uses event delegation on the document level to ensure tabs work
-     * even if parts of the DOM are re-rendered or modified by other scripts.
-     * DO NOT REMOVE: This is required for the Description/Reviews tabs on product pages.
-     */
-    const initTabs = () => {
-        const activeClass = "px-4 md:px-8 py-3 bg-[#1E293B]/50 text-cyan-400 font-bold rounded-t-lg border-t border-x border-white/5 text-sm relative top-[1px] transition-all";
-        const inactiveClass = "px-4 md:px-8 py-3 text-slate-400 hover:text-slate-200 font-medium text-sm transition-colors";
-
+    // 4. Tab Switching Logic (Robust & Independent)
+    function handleTabSwitching() {
+        // Use event delegation on the document for maximum robustness
         document.addEventListener('click', (e) => {
-            const btn = e.target.closest('[data-tab-target]');
-            if (!btn) return;
+            const tabBtn = e.target.closest('[id^="tab-btn-"]');
+            if (!tabBtn) return;
 
-            const tabId = btn.getAttribute('data-tab-target');
-            const container = btn.closest('#product-tabs')?.parentElement;
-            if (!container) return;
+            const tabId = tabBtn.id.replace('tab-btn-', '');
+            const tabContainer = tabBtn.closest('.mt-12'); // The tab wrapper
+            if (!tabContainer) return;
 
-            // Toggle Content
-            container.querySelectorAll('[data-tab-content]').forEach(content => {
-                content.classList.toggle('hidden', content.getAttribute('data-tab-content') !== tabId);
+            const allBtns = tabContainer.querySelectorAll('[id^="tab-btn-"]');
+            const allTabs = tabContainer.querySelectorAll('[id^="tab-"]');
+
+            const activeClass = "px-4 md:px-8 py-3 bg-[#1E293B]/50 text-cyan-400 font-bold rounded-t-lg border-t border-x border-white/5 text-sm relative top-[1px] transition-all";
+            const inactiveClass = "px-4 md:px-8 py-3 text-slate-400 hover:text-slate-200 font-medium text-sm transition-colors";
+
+            // Update Tabs
+            allTabs.forEach(tab => {
+                // Ensure we are only targeting the actual tab content divs, not the buttons
+                if (tab.id === `tab-${tabId}`) {
+                    tab.classList.remove('hidden');
+                } else if (tab.id.startsWith('tab-') && !tab.id.includes('btn')) {
+                    tab.classList.add('hidden');
+                }
             });
 
-            // Toggle Buttons
-            container.querySelectorAll('[data-tab-target]').forEach(tBtn => {
-                tBtn.className = (tBtn.getAttribute('data-tab-target') === tabId) ? activeClass : inactiveClass;
+            // Update Buttons
+            allBtns.forEach(btn => {
+                if (btn.id === `tab-btn-${tabId}`) btn.className = activeClass;
+                else btn.className = inactiveClass;
             });
 
             if (window.lucide) window.lucide.createIcons();
         });
-    };
-    initTabs();
+    }
+    handleTabSwitching();
 
-    // 5. Hydration Logic (Only if needed)
-    // We already have static content, but this ensures client-side state is sync'd
-    if (window.lucide) window.lucide.createIcons();
+    // 5. Dynamic Hydration Logic (Ensures site_data.js updates reflect immediately)
+    function hydratePage() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const dynamicProductPath = urlParams.get('p');
+        const dynamicCategoryPath = urlParams.get('c');
+        const path = dynamicProductPath || dynamicCategoryPath || window.location.pathname;
+        
+        const siteConfig = window.siteConfig || {};
+        const paths = siteConfig.pathConfig || { product: 'product', category: 'category', blog: 'blog' };
+        
+        // If we came from 404 redirect, we might need to show a special UI or just hydrate the home
+        if (dynamicProductPath || dynamicCategoryPath) {
+            console.log("Dynamic route detected:", path);
+            // In a real SPA we would swap templates here. 
+            // For now, let's at least show the correct info if possible.
+        }
+
+        // Helper: Find item by slug in a list
+        const findBySlug = (list, slug) => list ? list.find(item => item.slug === slug) : null;
+
+        // 5a. Product Page Hydration
+        if (path.includes(`/${paths.product}/`)) {
+            const slugPart = path.split(`/${paths.product}/`)[1];
+            if (!slugPart) return;
+            const slug = slugPart.replace(/\/+$/, '');
+            const product = findBySlug(window.products, slug);
+            if (product) {
+                console.log("Hydrating Product:", product.title);
+                const titleEl = document.getElementById('detail-title') || document.querySelector('h1');
+                const priceEl = document.getElementById('detail-price');
+                const descEl = document.getElementById('detail-desc') || document.getElementById('long-desc');
+                
+                if (titleEl) titleEl.textContent = product.title;
+                if (priceEl) priceEl.textContent = `$${product.min_price.toFixed(2)} - $${product.max_price.toFixed(2)}`;
+                
+                const shortDescEl = document.getElementById('detail-desc');
+                if (shortDescEl) shortDescEl.textContent = product.short_description || product.description;
+
+                // Update reviews count if elements exist
+                const reviewCountBadge = document.getElementById('review-count-badge');
+                if (reviewCountBadge && window.reviewsData) {
+                    const count = window.reviewsData.filter(r => r.productId === product.id).length;
+                    reviewCountBadge.textContent = count;
+                }
+            }
+        }
+        
+        // 5b. Category Page Hydration
+        else if (path.includes(`/${paths.category}/`)) {
+            const slugPart = path.split(`/${paths.category}/`)[1];
+            if (!slugPart) return;
+            const slug = slugPart.replace(/\/+$/, '');
+            const category = findBySlug(window.categories, slug);
+            if (category) {
+                console.log("Hydrating Category:", category.name);
+                const titleEl = document.querySelector('h1');
+                if (titleEl) titleEl.textContent = category.name;
+            }
+        }
+
+        // 5c. Global Elements (Header/Footer Links)
+        // We can update the navigation links to use the latest slugs from paths
+        document.querySelectorAll('a[data-type]').forEach(link => {
+            const type = link.getAttribute('data-type');
+            const slug = link.getAttribute('data-slug');
+            if (type && paths[type]) {
+                const newUrl = (type === 'home') ? '/' : `/${paths[type]}/${slug || ''}/`.replace(/\/+/g, '/');
+                link.href = newUrl;
+            }
+        });
+
+        // 5d. Product Grid Updates (for Home/Category pages)
+        if (document.getElementById('product-grid') && window.products) {
+            const cards = document.querySelectorAll('.card-glow');
+            cards.forEach(card => {
+                const cardLink = card.querySelector('a');
+                if (!cardLink) return;
+                
+                // Extract slug from card link
+                const href = cardLink.getAttribute('href');
+                const slugPart = href.split(`/${paths.product}/`)[1];
+                if (!slugPart) return;
+                const slug = slugPart.replace(/\/+$/, '');
+                
+                const product = findBySlug(window.products, slug);
+                if (product) {
+                    // Update Title
+                    const titleEl = card.querySelector('h3, .font-bold.text-slate-100');
+                    if (titleEl) titleEl.textContent = product.title;
+                    
+                    // Update Price
+                    const priceEl = card.querySelector('.text-xl.font-black.text-white');
+                    if (priceEl) priceEl.textContent = `$${product.min_price.toFixed(2)}`;
+                }
+            });
+        }
+    }
+    hydratePage();
+
+    // 6. Hydration Logic (Lucide Icons)
+    function initIcons() {
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        } else {
+            // Retry if lucide is not yet loaded
+            setTimeout(initIcons, 100);
+        }
+    }
+    initIcons();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initUI);
 else initUI();

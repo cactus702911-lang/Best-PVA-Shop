@@ -1116,14 +1116,14 @@ var blogs = ${JSON.stringify(cmsBlogs, null, 4)};
                 });
 
                 if (response.ok) {
-                    alert('✅ Saved & Rebuilt Successfully! Refresh your website to see changes.');
+                    alert('✅ Saved Successfully!\n\nThe site content and slugs are now dynamic. Pushing site_data.js to GitHub is enough to update the entire website!');
                 } else {
                     const msg = await response.text().catch(() => '');
                     alert(`⚠️ Save failed: ${msg || response.statusText}`);
                 }
             } catch (err) {
                 console.error(err);
-                alert('⚠️ Server connection failed. Downloading file manually.');
+                alert('⚠️ Server connection failed. Downloading site_data.js manually.\n\nSimply push this file to GitHub to update the website content and slugs instantly!');
                 const blob = new Blob([content], { type: 'text/javascript' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');

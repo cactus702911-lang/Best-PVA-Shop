@@ -1163,8 +1163,11 @@ blogs.forEach((post, index) => {
     </footer>
 
     <!-- Scripts -->
-    <script src="../../site_data.js"></script>
-    <script src="../../ui.js"></script>
+    <script>
+        document.write('<script src="../../site_data.js?v=' + Date.now() + '"><\\/script>');
+        document.write('<script src="../../ui.js?v=' + Date.now() + '"><\\/script>');
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof lucide !== 'undefined') lucide.createIcons();
