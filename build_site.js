@@ -428,6 +428,9 @@ function renderProductCard(product) {
     const solidColor = computeProductColor(product);
     const overlayClass = fullImgUrl ? 'bg-black/20 group-hover:bg-black/40' : 'bg-black/0 group-hover:bg-black/0';
     const productUrl = getDynamicUrl('product', product.slug, false);
+    const overlayTitle = (product.display_title && product.display_title.trim().length > 0)
+        ? product.display_title
+        : product.title.replace(/^Buy\s+/i, '');
     
     return `
     <div class="card-glow bg-[#1E293B] rounded-2xl border border-white/5 overflow-hidden transition-all duration-300 group hover:-translate-y-2" style="content-visibility: auto; contain-intrinsic-size: 0 350px;">
@@ -439,7 +442,7 @@ function renderProductCard(product) {
                 <span class="text-yellow-300 text-sm">Sale!</span> BestPVAShop
             </div>
             
-            <h3 class="text-xl font-bold leading-tight text-white mb-4 drop-shadow-lg z-10 relative">${product.display_title || product.title.replace(/^Buy\s+/i, '')}</h3>
+            <h3 class="text-xl font-bold leading-tight text-white mb-4 drop-shadow-lg z-10 relative">${overlayTitle}</h3>
             
             <a href="${productUrl}" class="bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold px-5 py-2 rounded-full mb-2 cursor-pointer hover:bg-white/20 hover:scale-105 transition-all block text-center no-underline z-10">
                 ORDER NOW
@@ -455,7 +458,7 @@ function renderProductCard(product) {
             </div>
             
             <a href="${productUrl}" class="font-bold text-slate-100 mb-3 text-sm hover:text-cyan-400 transition-colors block line-clamp-2 min-h-[40px]">
-                ${product.title}
+                ${overlayTitle}
             </a>
             
             <div class="flex items-center justify-between mb-5">

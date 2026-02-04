@@ -203,6 +203,12 @@ function initUI() {
 
         // Helper: Find item by slug in a list
         const findBySlug = (list, slug) => list ? list.find(item => item.slug === slug) : null;
+        const getOverlayTitle = (product) => {
+            const displayTitle = product && typeof product.display_title === 'string' ? product.display_title.trim() : '';
+            if (displayTitle) return displayTitle;
+            const title = product && typeof product.title === 'string' ? product.title : '';
+            return title.replace(/^Buy\s+/i, '');
+        };
 
         // 5a. Product Page Hydration
         if (path.includes(`/${paths.product}/`)) {
@@ -216,7 +222,7 @@ function initUI() {
                 const priceEl = document.getElementById('detail-price');
                 const descEl = document.getElementById('detail-desc') || document.getElementById('long-desc');
                 
-                if (titleEl) titleEl.textContent = product.title;
+                if (titleEl) titleEl.textContent = getOverlayTitle(product);
                 if (priceEl) priceEl.textContent = `$${product.min_price.toFixed(2)} - $${product.max_price.toFixed(2)}`;
                 
                 const shortDescEl = document.getElementById('detail-desc');
@@ -272,7 +278,7 @@ function initUI() {
                 if (product) {
                     // Update Title
                     const titleEl = card.querySelector('h3, .font-bold.text-slate-100');
-                    if (titleEl) titleEl.textContent = product.title;
+                    if (titleEl) titleEl.textContent = getOverlayTitle(product);
                     
                     // Update Price
                     const priceEl = card.querySelector('.text-xl.font-black.text-white');
