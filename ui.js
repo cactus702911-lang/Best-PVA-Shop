@@ -222,7 +222,7 @@ function initUI() {
                 const priceEl = document.getElementById('detail-price');
                 const descEl = document.getElementById('detail-desc') || document.getElementById('long-desc');
                 
-                if (titleEl) titleEl.textContent = getOverlayTitle(product);
+                if (titleEl) titleEl.textContent = product.title;
                 if (priceEl) priceEl.textContent = `$${product.min_price.toFixed(2)} - $${product.max_price.toFixed(2)}`;
                 
                 const shortDescEl = document.getElementById('detail-desc');
