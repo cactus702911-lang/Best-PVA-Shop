@@ -1,4 +1,4 @@
-﻿// site_data.js
+﻿﻿// site_data.js
 
 // --- Site Configuration (CMS Data) ---
 var siteConfig = {

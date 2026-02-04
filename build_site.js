@@ -1052,6 +1052,7 @@ for (let i = 1; i <= totalPages; i++) {
         ${paginationHtml}
     `);
     blogListHtml = blogListHtml.replace('{{LATEST_ARTICLES}}', ''); 
+    blogListHtml = blogListHtml.replace('{{PRODUCT_IMAGE_PRELOAD}}', '');
 
     // Footer & Links
     blogListHtml = blogListHtml.replace('{{FOOTER}}', generateFooter(products, siteConfig));

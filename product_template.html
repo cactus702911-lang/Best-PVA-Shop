@@ -353,6 +353,76 @@
 
     {{FOOTER}}
 
+    <!-- Contact Support Modal -->
+    <div id="contact-popup" class="fixed inset-0 z-[9999] hidden" style="z-index:2147483647" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity opacity-0 pointer-events-none" id="popup-backdrop" onclick="closePopup()"></div>
+        
+        <!-- Centered Container -->
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto pointer-events-none">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <!-- Modal Panel -->
+                <div class="relative transform overflow-hidden rounded-2xl bg-[#0F172A] border border-white/10 text-left shadow-2xl transition-all w-full max-w-md opacity-0 scale-95 pointer-events-auto" id="popup-panel">
+                    
+                    <!-- Header with Gradient -->
+                    <div class="bg-gradient-to-r from-cyan-600 to-blue-600 px-6 py-6 sm:px-8">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-2xl font-bold text-white flex items-center gap-2" id="modal-title">
+                                <i data-lucide="message-circle" class="h-6 w-6"></i> {{POPUP_TITLE}}
+                            </h3>
+                            <button type="button" class="rounded-full bg-white/20 p-1.5 text-white hover:bg-white/40 focus:outline-none focus:ring-2 focus:ring-white transition-colors" onclick="closePopup()" aria-label="Close modal">
+                                <i data-lucide="x" class="h-5 w-5"></i>
+                            </button>
+                        </div>
+                        <p class="mt-2 text-blue-100 text-sm font-medium">{{POPUP_MESSAGE}}</p>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="px-6 py-8 sm:px-8 space-y-4 bg-[#0F172A]">
+                        <a href="{{WHATSAPP_LINK}}" id="popup-whatsapp" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between w-full p-4 rounded-xl bg-[#1E293B] border border-white/5 hover:border-green-500/50 hover:bg-[#1E293B]/80 transition-all shadow-lg hover:shadow-green-500/10 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
+                                    <i data-lucide="phone" class="w-6 h-6 text-green-500"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h4 class="text-white font-bold">WhatsApp</h4>
+                                    <p class="text-slate-400 text-xs" id="popup-whatsapp-number">{{WHATSAPP}}</p>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500 group-hover:text-green-500 transition-colors"></i>
+                        </a>
+
+                        <a href="{{TELEGRAM_LINK}}" id="popup-telegram" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between w-full p-4 rounded-xl bg-[#1E293B] border border-white/5 hover:border-blue-500/50 hover:bg-[#1E293B]/80 transition-all shadow-lg hover:shadow-blue-500/10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+                                    <i data-lucide="send" class="w-6 h-6 text-blue-400"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h4 class="text-white font-bold">Telegram</h4>
+                                    <p class="text-slate-400 text-xs" id="popup-telegram-username">@{{TELEGRAM}}</p>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500 group-hover:text-blue-400 transition-colors"></i>
+                        </a>
+
+                        <a href="mailto:{{SUPPORT_EMAIL}}" id="popup-email" class="group flex items-center justify-between w-full p-4 rounded-xl bg-[#1E293B] border border-white/5 hover:border-red-500/50 hover:bg-[#1E293B]/80 transition-all shadow-lg hover:shadow-red-500/10 focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
+                                    <i data-lucide="mail" class="w-6 h-6 text-red-400"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h4 class="text-white font-bold">Email</h4>
+                                    <p class="text-slate-400 text-xs">{{SUPPORT_EMAIL}}</p>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-500 group-hover:text-red-400 transition-colors"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Core Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../../site_data.js"></script>

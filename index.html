@@ -6326,7 +6326,7 @@ video {
     </footer>
 
     <!-- Contact Support Modal -->
-    <div id="contact-popup" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="contact-popup" class="fixed inset-0 z-[9999] hidden" style="z-index:2147483647" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <!-- Backdrop -->
         <div class="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity opacity-0 pointer-events-none" id="popup-backdrop" onclick="closePopup()"></div>
         
@@ -6397,8 +6397,26 @@ video {
 
     <!-- Defer Non-Critical Assets -->
     <script>
-        document.write('<script src="site_data.js?v=' + Date.now() + '"><\\/script>');
-        document.write('<script src="ui.js?v=' + Date.now() + '"><\\/script>');
+        (function () {
+            const parts = window.location.pathname.split('/').filter(Boolean);
+            let depth = parts.length;
+            if (depth > 0 && parts[depth - 1].includes('.')) depth -= 1;
+            if (depth < 0) depth = 0;
+            const prefix = '../'.repeat(depth);
+            const v = Date.now();
+            const loadScript = (src, onLoad, onError) => {
+                const s = document.createElement('script');
+                s.src = src;
+                if (onLoad) s.onload = onLoad;
+                if (onError) s.onerror = onError;
+                document.head.appendChild(s);
+            };
+            loadScript(prefix + 'site_data.js?v=' + v, () => {
+                loadScript(prefix + 'ui.js?v=' + v, null, () => loadScript(prefix + 'ui.js'));
+            }, () => {
+                loadScript(prefix + 'site_data.js', () => loadScript(prefix + 'ui.js'), () => loadScript(prefix + 'ui.js'));
+            });
+        })();
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>

@@ -1,5 +1,4 @@
 function initUI() {
-    console.log("initUI started. Path:", window.location.pathname);
     // 1. Path Management (Simplified with root-relative paths)
     const paths = (window.siteConfig && window.siteConfig.pathConfig) ? window.siteConfig.pathConfig : {
         product: 'product',
