@@ -1233,7 +1233,7 @@ products.forEach(product => {
     const relatedHtml = related.map(p => {
         const relColor = computeProductColor(p);
         const relSlug = p.slug.replace(/^\/+|\/+$/g, '');
-        const relUrl = getDynamicUrl('product', relSlug).replace(baseUrl, '../');
+        const relUrl = getDynamicUrl('product', relSlug, false);
         return `
             <div class="card-glow bg-[#1E293B] rounded-xl border border-white/5 overflow-hidden transition-all duration-300 group hover:-translate-y-2" style="content-visibility: auto; contain-intrinsic-size: 0 350px;">
                 <div role="img" aria-label="${p.image_title || p.title}" class="p-4 h-44 relative flex flex-col items-center justify-center text-center text-white group-hover:scale-105 transition-transform duration-500" style="background-color: ${relColor};">
