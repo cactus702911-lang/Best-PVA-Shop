@@ -63,6 +63,18 @@
         .prose ul { list-style-type: disc !important; padding-left: 1.5rem !important; margin-bottom: 0.5rem !important; margin-top: 0 !important; }
         .prose ol { list-style-type: decimal !important; padding-left: 1.5rem !important; margin-bottom: 0.5rem !important; margin-top: 0 !important; }
         .prose li { margin-bottom: 0.25rem !important; margin-top: 0 !important; }
+
+        /* Link styling inside description */
+        .prose a {
+            color: #22d3ee !important;
+            text-decoration: underline !important;
+            text-underline-offset: 3px !important;
+            transition: color 0.2s ease, opacity 0.2s ease !important;
+        }
+        .prose a:hover {
+            color: #67e8f9 !important;
+            opacity: 0.9 !important;
+        }
     </style>
     {{CRITICAL_CSS}}
     <!-- Google Analytics (GA4) -->
