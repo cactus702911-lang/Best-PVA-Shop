@@ -1,4 +1,4 @@
-// site_data.js
+﻿// site_data.js
 
 // --- Site Configuration (CMS Data) ---
 var siteConfig = {
@@ -61,8 +61,11 @@ var categories = [
         "description": "",
         "content": "<p><br></p>",
         "items": [
+            "Verified WeChat Account",
             "MegaPersonals Accounts",
-            "Verified WeChat Account"
+            "Tinder Account",
+            " Twitter Accounts",
+            "GitHub Account"
         ]
     }
 ];
@@ -599,7 +602,11 @@ var blogs = [
         "image": "/images/blog/what-is-paypal-complete-guide-verified-accounts-2026.webp",
         "date": "Jul 01, 2026",
         "seo_tags": "paypal account, buy paypal account, verified paypal account, what is paypal, paypal for business, paypal payment, paypal verification, paypal account types, paypal sending limit, paypal for freelancers",
-        "related_ids": [52, 50, 51],
+        "related_ids": [
+            52,
+            50,
+            51
+        ],
         "cta_1_text": "Get a Verified PayPal Account → Browse Packages at BestPVAShop",
         "cta_1_link": "/product/paypal-account-packages-verified-profiles-for-payment-testing-integration/",
         "cta_2_text": "Need a Verified Cash App Account Too? → Explore Payment Accounts",
